@@ -1,0 +1,16 @@
+# Build output
+*.zip
+*.crx
+*.xlsx
+*.csv
+
+# Test artefacts
+tests/test_out.xlsx
+node_modules/
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

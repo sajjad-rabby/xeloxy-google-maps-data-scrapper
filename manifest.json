@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Xeloxy Google Maps Data Scrapper",
+  "version": "3.0.0",
+  "description": "Scrape Google Maps business listings with phone, address, website, hours, category and coordinates, then hunt for email addresses on the business website. Runs in the background, exports CSV and XLSX.",
+  "author": "Sajjad Rabby",
+  "homepage_url": "https://github.com/sajjad-rabby",
+  "permissions": ["activeTab", "scripting", "downloads", "storage", "tabs", "alarms"],
+  "host_permissions": ["*://*.google.com/*", "<all_urls>"],
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Xeloxy Maps Data Scrapper",
+    "default_icon": {
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    }
+  }
+}

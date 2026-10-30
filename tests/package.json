@@ -1,0 +1,6 @@
+{
+  "name": "xeloxy-maps-scrapper-tests",
+  "private": true,
+  "type": "module",
+  "description": "Offline test suite for the Xeloxy Google Maps Data Scrapper."
+}

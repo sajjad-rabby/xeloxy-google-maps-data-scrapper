@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Xeloxy Maps Data Scrapper</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+  <header class="header">
+    <img src="logo.png" alt="Xeloxy Maps Data Scraper" class="logo">
+    <div class="header-text">
+      <h1>Xeloxy Maps Data Scrapper</h1>
+      <div class="header-meta">
+        <span class="version" id="version">v3.0.0</span>
+        <span class="by">by <strong>Sajjad Rabby</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- target -->
+  <section class="card target" id="targetCard">
+    <div class="target-row">
+      <span class="dot" id="targetDot"></span>
+      <div class="target-text">
+        <div class="target-title" id="targetTitle">Checking for a Google Maps tab...</div>
+        <div class="target-sub" id="targetSub">Open google.com/maps and run a search first.</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="openMaps">Open Maps</button>
+    </div>
+  </section>
+
+  <!-- progress -->
+  <section class="card">
+    <div class="status-row">
+      <span class="pill" id="statusPill">Idle</span>
+      <span class="status-detail" id="statusDetail">Not started</span>
+      <span class="elapsed" id="elapsed">00:00</span>
+    </div>
+
+    <ol class="steps" id="steps">
+      <li class="step" data-step="feed"><span class="step-dot">1</span><span class="step-name">Feed</span><span class="step-count" id="stepFeed">0</span></li>
+      <li class="step" data-step="details"><span class="step-dot">2</span><span class="step-name">Details</span><span class="step-count" id="stepDetails">0</span></li>
+      <li class="step" data-step="emails"><span class="step-dot">3</span><span class="step-name">Emails</span><span class="step-count" id="stepEmails">0</span></li>
+    </ol>
+
+    <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+    <div class="bar-text" id="barText">Ready when you are.</div>
+
+    <div class="tiles">
+      <div class="tile"><span class="tile-label">Places</span><span class="tile-value" id="statPlaces">0</span></div>
+      <div class="tile"><span class="tile-label">Phones</span><span class="tile-value" id="statPhones">0</span></div>
+      <div class="tile tile-green"><span class="tile-label">Emails</span><span class="tile-value" id="statEmails">0</span></div>
+      <div class="tile"><span class="tile-label">Websites</span><span class="tile-value" id="statSites">0</span></div>
+      <div class="tile"><span class="tile-label">ETA</span><span class="tile-value" id="statEta">--</span></div>
+    </div>
+
+    <div class="current" id="current" hidden>
+      <span class="current-label">Working on</span>
+      <span class="current-value" id="currentValue">-</span>
+    </div>
+  </section>
+
+  <!-- controls -->
+  <section class="card">
+    <div class="btn-row">
+      <button class="btn btn-primary" id="start">Start</button>
+      <button class="btn btn-stop" id="stop" disabled>Stop</button>
+      <button class="btn btn-ghost" id="resume" disabled>Resume</button>
+      <button class="btn btn-danger" id="reset">Reset</button>
+    </div>
+
+    <details class="options" id="options">
+      <summary>Options</summary>
+
+      <div class="grid3">
+        <label class="field"><span>Max results</span><input type="number" id="maxResults" value="20" min="5" max="100"></label>
+        <label class="field"><span>Max scrolls</span><input type="number" id="maxScrolls" value="8" min="2" max="30"></label>
+        <label class="field"><span>Delay (ms)</span><input type="number" id="delayMs" value="2200" min="1000" max="8000" step="100"></label>
+      </div>
+
+      <div class="grid2">
+        <label class="field"><span>Min rating (0 = any)</span><input type="number" id="minRating" value="0" min="0" max="5" step="0.5"></label>
+        <label class="field"><span>File name</span><input type="text" id="fileName" value="maps-leads"></label>
+      </div>
+
+      <label class="check"><input type="checkbox" id="deepDetails" checked> <span>Place details &mdash; phone, website, address, hours, category, coordinates</span></label>
+      <label class="check"><input type="checkbox" id="findEmail" checked> <span>Hunt email on business websites</span></label>
+      <label class="check"><input type="checkbox" id="deepEmail" checked> <span>Render sites in a background tab when the address is JavaScript-only</span></label>
+      <label class="check"><input type="checkbox" id="requirePhone"> <span>Only export rows that have a phone number</span></label>
+
+      <div class="field">
+        <span class="field-label">Email hunt depth</span>
+        <div class="radios">
+          <label><input type="radio" name="emailDepth" value="fast"> Fast</label>
+          <label><input type="radio" name="emailDepth" value="balanced" checked> Balanced</label>
+          <label><input type="radio" name="emailDepth" value="deep"> Deep</label>
+        </div>
+        <p class="hint" id="depthHint">Homepage plus up to 3 contact pages and 4 common contact paths.</p>
+      </div>
+
+      <div class="field">
+        <span class="field-label">Export format</span>
+        <div class="radios">
+          <label><input type="radio" name="fmt" value="csv" checked> CSV</label>
+          <label><input type="radio" name="fmt" value="xlsx"> XLSX</label>
+          <label><input type="radio" name="fmt" value="both"> Both</label>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- results -->
+  <section class="card">
+    <div class="results-head">
+      <span class="results-title">Results <span class="count" id="previewCount">0</span></span>
+      <div class="export-row">
+        <button class="btn btn-export" id="expCsv" disabled>CSV</button>
+        <button class="btn btn-export" id="expXlsx" disabled>XLSX</button>
+        <button class="btn btn-export" id="expCopy" disabled>Copy</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Phone</th><th>Email</th><th>Website</th></tr>
+        </thead>
+        <tbody id="resultsBody">
+          <tr class="empty"><td colspan="4">No leads yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- log -->
+  <details class="card log-card" id="logCard">
+    <summary>Activity log</summary>
+    <div class="log" id="log">Ready. Search something on Google Maps first, for example "dentists in Austin".</div>
+  </details>
+
+  <footer class="footer">
+    <span>Developed by <strong>Sajjad Rabby</strong></span>
+    <a href="https://github.com/sajjad-rabby" target="_blank" rel="noopener">github.com/sajjad-rabby</a>
+  </footer>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

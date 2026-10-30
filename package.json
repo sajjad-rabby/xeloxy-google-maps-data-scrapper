@@ -1,0 +1,17 @@
+{
+  "name": "xeloxy-google-maps-data-scrapper",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Chrome extension that turns a Google Maps search into a clean lead list, with email discovery.",
+  "author": "Sajjad Rabby",
+  "license": "MIT",
+  "homepage": "https://github.com/sajjad-rabby/xeloxy-google-maps-data-scrapper",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sajjad-rabby/xeloxy-google-maps-data-scrapper.git"
+  },
+  "scripts": {
+    "test": "node tests/test_email.mjs && node tests/test_xlsx.mjs && node tests/test_background.mjs"
+  }
+}
